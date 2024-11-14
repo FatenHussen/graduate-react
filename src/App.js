@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./Pages/Login";
+import Signup from "./Pages/Signup";
+import ForgotPassword from "./Pages/ForgotPassword";
+import Landing from "./Pages/Landing";
+import Catagory from "./Pages/Catagory";
+import Products from "./Pages/Products";
+import Search from "./Pages/Search";
+import Product from "./Pages/Product";
+import Cart from "./Pages/Cart";
+import Verification from "./Pages/Verification";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+    <Routes>
+    <Route path="/" Component={Landing}></Route>
+    <Route path="/catagory" Component={Catagory}></Route>
+    <Route path="/products" Component={Products}></Route>
+    <Route path="/product" Component={Product}></Route>
+    <Route path="/cart" Component={Cart}></Route>
+    <Route path="/search" Component={Search}></Route>
+    <Route path="/login" Component={Login}></Route>
+      <Route path="/signup" Component={Signup}></Route>
+      <Route path="/verification" Component={Verification}></Route>
+      <Route path="/forgot-password" Component={ForgotPassword}></Route>
+    </Routes>
+  </Router>
   );
 }
 
