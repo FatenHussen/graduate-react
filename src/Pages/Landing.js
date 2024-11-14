@@ -5,27 +5,31 @@ import NavBar from '../Components/NavBar';
 import { CCarousel, CCarouselItem, CImage,CCarouselCaption } from '@coreui/react';
 import '@coreui/coreui/dist/css/coreui.min.css';
 
-import logo from '../Assets/finalLogo2.png';
-import img from '../Assets/still-life-care-products.jpg'
+import img from '../Assets/modern-beauty-products-different-recipients-assortment.jpg'
+import img1 from '../Assets/beautiful-young-woman-applying-body-lotion-after-shower.jpg'
+import img2 from '../Assets/freepik-export-20241114190825Vzdb.jpeg'
+
+
 
 const Landing = () => {
   const data = [
     {
-      img: img,
-      name: "First Slide Label",
-      paragraph: "Some representative placeholder content for the first slide."
+        img: img,
+        name: "Radiant Glow",
+        paragraph: "Discover our new skincare range for a flawless, healthy glow."
     },
     {
-      img: logo,
-      name: "Second Slide Label",
-      paragraph: "Some representative placeholder content for the second slide."
+        img: img1,
+        name: "Revitalizing Care",
+        paragraph: "Nourish your skin with our revitalizing beauty treatments."
     },
     {
-      img: img,
-      name: "Third Slide Label",
-      paragraph: "Some representative placeholder content for the third slide."
+        img: img2,
+        name: "Natural Wellness",
+        paragraph: "Experience the perfect blend of nature and science for optimal health."
     }
-  ]
+];
+
   
   return (
     <div className="relative w-screen h-screen">

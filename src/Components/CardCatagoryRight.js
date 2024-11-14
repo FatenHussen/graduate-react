@@ -1,7 +1,8 @@
 // TODO 
-//1- Adding Navigating
+//1- Adding Navigating (DONE)
 
 import React from 'react'
+import { Link } from 'react-router-dom'
 // import img from '../Assets/Doctors.jpg'
 
 
@@ -31,11 +32,12 @@ const CardCatagoryleft = ({name,img,describe}) => {
       {describe}
     </p>
   </div>
-  <button
-    class="w-32 h-10 z-50 hover:bg-[#d6e7fe] bg-[#fff] text-[#0B74FA] font-semibold transition ease-in-out delay-50 rounded"
+  <Link
+  to='/products'
+    class="w-32 h-10 z-50 hover:bg-[#d6e7fe] flex justify-center items-center no-underline bg-[#fff] text-[#0B74FA] font-semibold transition ease-in-out delay-50 rounded"
   >
     Explore
-  </button>
+  </Link>
 </div>
 
   )

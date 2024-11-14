@@ -1,17 +1,16 @@
-//TODO
-//1- Error Handling
-
 import React, { useState, useEffect } from 'react';
-import NavBar from '../Components/NavBar';
 
 import { BsArrowLeft, BsArrowRight, BsCart3, BsStarFill, BsStarHalf, BsStar  } from "react-icons/bs";
 
 import img from '../Assets/still-life-care-products.jpg';
-import img1 from '../Assets/Doctors.jpg';
+import img1 from '../Assets/front-view-plastic-bottles-hair-dye.jpg';
 import Comment from '../Components/Comment';
 import Card from '../Components/Card';
+import NavBar from '../Components/NavBar';
+import { useParams } from 'react-router-dom';
 
 const Product = () => {
+  const { id } = useParams
   const data = [img, img1, img, img1, img];
   const reviews =[
     {
@@ -122,7 +121,7 @@ const Product = () => {
   return (
     <div className='w-full min-h-screen h-fit bg-white flex items-center flex-col gap-3'>
       <div className='w-[100%] h-16 relative'>
-        <NavBar/>
+        <NavBar />
       </div>
       <div className='w-full h-96 flex justify-evenly items-center'>
         <div className="relative w-[50%] h-[100%] flex justify-center items-center flex-col">
@@ -234,7 +233,7 @@ const Product = () => {
           const starValue = index + 1;
           return (
             <button
-              key={index}
+              key={index}   
               type="button"
               onClick={() => handleClick(starValue)}
               onMouseEnter={() => setHover(starValue)}
@@ -258,13 +257,16 @@ const Product = () => {
       <div className='w-[90%] min-h-[150px] h-fit flex justify-between items-start flex-col'>
       <h2 className='text-3xl border-b border-[#0b74fa] px-1'>Recommended products</h2>
       <div className={`w-[100%] h-fit ${reviews ? 'grid grid-cols-4 place-items-center gap-3 my-3' : 'block'}`}>
-        {reviews ? 
-        <>
-        {reviews.map((item, index) => (
-            <Card/>
-          ))}
-          </>
-        : <p className='text-center text-2xl text-[#074da6] font-semibold'>No Recommendations</p>}
+      <>
+  {reviews && reviews.length > 0 ? (
+    reviews.map((item, index) => (
+      <Card />
+    ))
+  ) : (
+    <p className='text-center text-2xl text-[#074da6] font-semibold'>No Recommendations</p>
+  )}
+</>
+
       </div>
       </div>
     </div>
