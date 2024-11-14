@@ -9,6 +9,7 @@ import Search from "./Pages/Search";
 import Product from "./Pages/Product";
 import Cart from "./Pages/Cart";
 import Verification from "./Pages/Verification";
+import Profile from "./Pages/Profile";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
     <Routes>
     <Route path="/" Component={Landing}></Route>
     <Route path="/catagory" Component={Catagory}></Route>
+    <Route path="/profile" Component={Profile}></Route>
     <Route path="/products" Component={Products}></Route>
     <Route path="/product" Component={Product}></Route>
     <Route path="/cart" Component={Cart}></Route>
