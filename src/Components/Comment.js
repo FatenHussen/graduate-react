@@ -2,8 +2,8 @@ import React from 'react'
 import { BsStarFill, BsStarHalf, BsStar  } from "react-icons/bs";
 
 
-const Comment = () => {
-    const rate = 3.5
+const Comment = ({name, review, date, rate}) => {
+    // const rate = 3.5
   const fullStars = Math.floor(rate);
   const halfStar = rate % 1 >= 0.5;
   const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
@@ -18,11 +18,11 @@ const Comment = () => {
       <div
         class="text-xl"
       >
-        User Name
+        {name}
       </div>
       <div
         class="text-[#7f7f7f]"
-      >2024-12-12</div>
+      >{date}</div>
     </div>
   </div>
   <div class="flex flex-row justify-between w-full">
@@ -41,9 +41,7 @@ const Comment = () => {
   <div
     class="w-full min-h-20 h-fit"
   >
-    The product is decent but not as described. The color was different from what I saw online.
-    The product is decent but not as described. The color was different from what I saw online.
-    The product is decent but not as described. The color was different from what I saw online.
+    {review}
   </div>
 </div>
 

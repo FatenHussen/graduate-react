@@ -109,7 +109,7 @@ const Search = () => {
         </div>
         <div className='w-[100%] min-h-[75.2vh]  h-fit grid grid-cols-4 gap-5 items-center place-items-center'>
         {products.map((item, index) => (
-          <Card/>
+          <Card name={item.name} price={item.price} company={item.company} id={item.id} rate={item.rate}/>
         ))}
         </div>
     </div> 

@@ -12,6 +12,113 @@ import { useParams } from 'react-router-dom';
 const Product = () => {
   const { id } = useParams
   const data = [img, img1, img, img1, img];
+  const products = [
+    {
+        "id": 1,
+        "name": "Hydrating Face Cream",
+        "company": "GlowCare",
+        "price": 24.99,
+        "rate": 4.5
+    },
+    {
+        "id": 2,
+        "name": "Natural Lip Balm",
+        "company": "EcoBeauty",
+        "price": 5.99,
+        "rate": 4.2
+    },
+    {
+        "id": 3,
+        "name": "Revitalizing Shampoo",
+        "company": "PureLocks",
+        "price": 14.49,
+        "rate": 4.7
+    },
+    {
+        "id": 4,
+        "name": "Herbal Body Lotion",
+        "company": "Nature's Touch",
+        "price": 12.99,
+        "rate": 4.4
+    },
+    {
+        "id": 5,
+        "name": "Anti-Aging Serum",
+        "company": "YouthGuard",
+        "price": 29.99,
+        "rate": 4.8
+    },
+    {
+        "id": 6,
+        "name": "Hydrating Face Cream",
+        "company": "GlowCare",
+        "price": 24.99,
+        "rate": 4.5
+    },
+    {
+        "id": 7,
+        "name": "Natural Lip Balm",
+        "company": "EcoBeauty",
+        "price": 5.99,
+        "rate": 4.2
+    },
+    {
+        "id": 8,
+        "name": "Revitalizing Shampoo",
+        "company": "PureLocks",
+        "price": 14.49,
+        "rate": 4.7
+    },
+    {
+        "id": 9,
+        "name": "Herbal Body Lotion",
+        "company": "Nature's Touch",
+        "price": 12.99,
+        "rate": 4.4
+    },
+    {
+        "id": 10,
+        "name": "Anti-Aging Serum",
+        "company": "YouthGuard",
+        "price": 29.99,
+        "rate": 4.8
+    },
+    {
+        "id": 11,
+        "name": "Hydrating Face Cream",
+        "company": "GlowCare",
+        "price": 24.99,
+        "rate": 4.5
+    },
+    {
+        "id": 12,
+        "name": "Natural Lip Balm",
+        "company": "EcoBeauty",
+        "price": 5.99,
+        "rate": 4.2
+    },
+    {
+        "id": 13,
+        "name": "Revitalizing Shampoo",
+        "company": "PureLocks",
+        "price": 14.49,
+        "rate": 4.7
+    },
+    {
+        "id": 14,
+        "name": "Herbal Body Lotion",
+        "company": "Nature's Touch",
+        "price": 12.99,
+        "rate": 4.4
+    },
+    {
+        "id": 15,
+        "name": "Anti-Aging Serum",
+        "company": "YouthGuard",
+        "price": 29.99,
+        "rate": 4.8
+    }    
+];
   const reviews =[
     {
       "id": 1,
@@ -194,7 +301,7 @@ const Product = () => {
         </div>
         <div className='w-[100%] h-[57%] grid grid-cols-2 place-items-center overflow-y-auto -mt-20 pb-3 scrollbar-thin scrollbar-track-[#d4d4d4] scrollbar-thumb-[#074da6]'>
         {reviews.map((item, index) => (
-          <Comment/>
+          <Comment name={item.username} review={item.review} date={item.date} rate={item.rating} />
         ))}
         </div>
 
@@ -258,9 +365,9 @@ const Product = () => {
       <h2 className='text-3xl border-b border-[#0b74fa] px-1'>Recommended products</h2>
       <div className={`w-[100%] h-fit ${reviews ? 'grid grid-cols-4 place-items-center gap-3 my-3' : 'block'}`}>
       <>
-  {reviews && reviews.length > 0 ? (
-    reviews.map((item, index) => (
-      <Card />
+  {products && products.length > 0 ? (
+    products.map((item, index) => (
+      <Card name={item.name} price={item.price} company={item.company} id={item.id} rate={item.rate}/>
     ))
   ) : (
     <p className='text-center text-2xl text-[#074da6] font-semibold'>No Recommendations</p>

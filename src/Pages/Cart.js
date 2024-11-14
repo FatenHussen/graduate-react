@@ -1,59 +1,8 @@
-// import React from 'react'
-// import NavBar3 from '../Components/NavBar3'
-import img from '../Assets/Doctors.jpg'
-
-// const Cart = () => {
-//   return (
-//     <div className='w-full min-h-screen h-fit bg-white flex items-center flex-col gap-3'>
-//       <div className='w-[100%] h-16 relative'>
-//         <NavBar3 />
-//       </div>
-//       <div className='w-full h-fit flex justify-evenly items-center flex-col gap-3'>
-//         <h1 className='font-normal'>Your Shopping Cart</h1>
-//         {/* <table>
-//           <tr className='w-[90%] '>
-//           <th className='w-[15%] bg-black '></th>
-//           </tr>
-//           <tr className='w-[90%] h-64 bg-[#F7F7F7] rounded-lg '>
-//         <div>
-//           <img src={img} className='w-[15%] rounded-md'/>
-//           <div className='w-[15%] h-[100%] flex justify-center items-start flex-col gap-2'>
-//             <h2 className='text-2xl'>Product name</h2>
-//             <button className='text-[#EA4335] hover:text-[#ea4435b0] font-bold'>Remove</button>
-//           </div>
-//         </div>
-//         <div className='w-[90%] h-0.5 rounded-full bg-[#add0fd]'></div>
-//         </tr>
-//         </table> */}
-//         <table className='w-[90%]'>
-//           <tr className='w-[100%] h-12 border-b-2 border-[#0B74FA]'>
-//             <th className='w-[15%]'>Product</th>
-//             <th className='w-[25%]'></th>
-//             <th className='w-[20%] text-center'>Price</th>
-//             <th className='w-[20%] text-center'>Quanity</th>
-//             <th className='w-[20%] text-center'>Total</th>
-//           </tr>
-//           <tr className='w-[100%] h-60 bg-[#F7F7F7]'>
-//             <td className='w-[15%]'>
-//               <img src={img} className='w-[100%] rounded-md'/>
-//             </td>
-//             <td className='w-[25%] h-[100%] text-center'>
-//             <h2 className='text-2xl'>Product name</h2>
-//             <button className='text-[#EA4335] hover:text-[#ea4435b0] font-bold -ml-[25%]'>Remove</button>
-//             </td>
-//             <td className='w-[20%] text-center'>500$</td>
-//           </tr>
-//         </table>
-//         </div>
-//       </div>
-//   )
-// }
-
-// export default Cart
 
 import React, { useState } from 'react';
 import NavBar from '../Components/NavBar';
 import Payment from '../Models/Payment';
+import img from '../Assets/Doctors.jpg'
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([
