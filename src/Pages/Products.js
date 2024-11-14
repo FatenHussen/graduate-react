@@ -4,8 +4,11 @@
 import React from 'react'
 import Card from '../Components/Card'
 import NavBar from '../Components/NavBar'
+import { useParams } from 'react-router-dom'
 
 const Products = () => {
+  const { name } = useParams()
+
   const products = [
     {
         "id": 1,

@@ -10,7 +10,7 @@ import NavBar from '../Components/NavBar';
 import { useParams } from 'react-router-dom';
 
 const Product = () => {
-  const { id } = useParams
+  const { id } = useParams()
   const data = [img, img1, img, img1, img];
   const products = [
     {

@@ -1,7 +1,7 @@
 //TODO
 //1- json 
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBar from '../Components/NavBar';
 import CardCatagory from '../Components/CardCatagory';
 import CardCatagoryLeft from '../Components/CardCatagoryRight';
@@ -9,9 +9,12 @@ import Background from '../Components/Background'; // Import the Background comp
 
 import logo from '../Assets/finalLogo2.png';
 import img from '../Assets/still-life-care-products.jpg';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 // import NavBar3 from '../Components/NavBar3';
 
 const Catagory = () => {
+  const navigate = useNavigate()
   const data = [
     {
       img: img,
@@ -29,6 +32,30 @@ const Catagory = () => {
       paragraph: "Some representative placeholder content for the third slide.",
     },
   ];
+  const [catagory, setCatagory] = useState('')
+
+  const CatagoriesURLAPI=`http://127.0.0.1:8000/api/admin/categories`
+  async function catagories(){
+    console.log('ssss')
+       try{
+        const response = await axios.get(CatagoriesURLAPI, {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}`,
+            "Content-Type": "multipart/form-data",
+            "Access-Control-Allow-Origin": "*"
+          }
+        });
+        console.log('pp',response.data.data)
+        setCatagory(response.data.data)
+
+      }catch(err){
+          console.log(err)
+      }
+  }
+
+  useEffect(() => {
+    catagories()
+  }, []);
 
   return (
     <div className="relative w-full min-h-screen h-fit">
@@ -39,15 +66,15 @@ const Catagory = () => {
           <NavBar />
         </div>
         <div className="w-[95%] min-h-[83%] h-fit flex justify-evenly items-center flex-col gap-3 mb-5">
-          {data.map((item, index) => (
+          {catagory.length ? catagory.map((item, index) => (
             <div key={index} className={`w-[100%] flex ${index % 2 === 0 ? 'justify-start' : 'justify-end'} items-center`}>
               {index % 2 === 0 ? (
-                <CardCatagory img={item.img} name={item.name} describe={item.paragraph} />
+                <CardCatagory img={item.images} name={item.name} describe={item.description} />
               ) : (
-                <CardCatagoryLeft img={item.img} name={item.name} describe={item.paragraph} />
+                <CardCatagoryLeft img={item.images} name={item.name} describe={item.description} />
               )}
             </div>
-          ))}
+          )) : ''}
         </div>
       </div>
     </div>

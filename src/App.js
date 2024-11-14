@@ -17,7 +17,7 @@ function App() {
     <Routes>
     <Route path="/" Component={Landing}></Route>
     <Route path="/catagory" Component={Catagory}></Route>
-    <Route path="/products" Component={Products}></Route>
+    <Route path="/products/:name" Component={Products}></Route>
     <Route path="/product/:id" Component={Product}></Route>
     <Route path="/cart" Component={Cart}></Route>
     <Route path="/search" Component={Search}></Route>

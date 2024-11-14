@@ -23,7 +23,7 @@ const CardCatagoryleft = ({name,img,describe}) => {
   ></div>
   <div
     class="absolute duration-700 group-hover:-translate-x-4 top-[10%] z-50 -left-44 w-1/2 h-4/5 rounded-lg bg-cover bg-center"
-    style={{ boxShadow: '5px 0px 25px 0px #85b9fc', backgroundImage: `url(${img})` }}
+    style={{ boxShadow: '5px 0px 25px 0px #85b9fc', backgroundImage: `url(http://127.0.0.1:8000${img})` }}
   ></div>
 
   <div class="z-50">
@@ -33,7 +33,7 @@ const CardCatagoryleft = ({name,img,describe}) => {
     </p>
   </div>
   <Link
-  to='/products'
+    to={`/products/${name}`}
     class="w-32 h-10 z-50 hover:bg-[#d6e7fe] flex justify-center items-center no-underline bg-[#fff] text-[#0B74FA] font-semibold transition ease-in-out delay-50 rounded"
   >
     Explore
