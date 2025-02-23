@@ -17,6 +17,7 @@ const NavBar = () => {
 
   const LogoutURLAPI=`http://127.0.0.1:8000/api/user/logout`
   async function logout(){
+    localStorage.removeItem('token')
     console.log('ssss')
        try{
         const response = await axios.get(LogoutURLAPI, {
@@ -79,12 +80,12 @@ const NavBar = () => {
           </>
         ) : (
           <>
-            <button className="w-[30%] h-[100%] border border-white hover:bg-[#ffffff52] transition ease-in-out delay-50 rounded-xl">
+            <Link to='/login' className="w-[30%] h-[100%] flex justify-center items-center no-underline text-white border border-white hover:bg-[#ffffff52] transition ease-in-out delay-50 rounded-xl">
               Login
-            </button>
-            <button className="w-[30%] h-[100%] text-[#0B74FA] hover:bg-[#ffffff4e] transition ease-in-out delay-50 bg-white rounded-xl">
+            </Link>
+            <Link to='/signup' className="w-[30%] h-[100%] flex justify-center items-center no-underline text-white text-[#0B74FA] hover:bg-[#ffffff4e] transition ease-in-out delay-50 bg-white rounded-xl">
               Signup
-            </button>
+            </Link>
           </>
         )}
       </div>
