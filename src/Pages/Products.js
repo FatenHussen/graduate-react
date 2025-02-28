@@ -8,6 +8,7 @@ import Table from '../Components/Products/Table';
 import Card from '../Components/Products/Card';
 import img from '../Assets/modern-beauty-products-different-recipients-assortment.jpg'
 import Filter from '../Models/Products/Filter';
+import axios from 'axios';
 
 const Products = () => {
     const [view, setView] = useState(false) 
@@ -155,6 +156,8 @@ const Products = () => {
     }
         );
 
+
+
         const handleSave = (productData) => {
           if (modalMode === 'add') {
             setProducts(prev => ({
@@ -177,13 +180,19 @@ const Products = () => {
           return matchesPrice && matchesRating && matchesCategory;
         });
 
-        const handleDelete = () => {
-          setProducts(prev => ({
-            products: prev.products.filter(p => p.id !== selectedProduct.id)
-          }));
-          setDelet(false);
-          setModalMode(null);
-        };
+        const DeleteURlAPI = `http://127.0.0.1:8000/api/products/${selectedProduct.id}`;
+
+  async function delete_product() {
+    try {
+      const response = await axios.delete(DeleteURlAPI,);
+      console.log('pp',response.data)
+      // localStorage.setItem('token', response.data.data.token);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDelet(false)
+    }
+  }
 
         const hasFilters = 
   priceRange[0] !== 0 || 
@@ -192,7 +201,7 @@ const Products = () => {
   selectedCategories.length > 0;
 
     return (
-      
+
       <div className='w-full h-fit flex justify-between items-center flex-col md:flex-row'>
           <SideBar/>
           <div className='w-[95%] min-h-screen h-fit flex justify-evenly items-center flex-col my-5 md:my-0'>
@@ -253,6 +262,7 @@ const Products = () => {
           <AddProduct 
         mode={modalMode}
         product={selectedProduct}
+        id={selectedProduct?.id}
         onClose={() => {
           setModalMode(null);
           setSelectedProduct(null);
@@ -264,7 +274,7 @@ const Products = () => {
       <Delete 
         onClose={() => setDelet(false)} 
         visible={delet} 
-        onConfirm={handleDelete}
+        onConfirm={delete_product}
       />
       <Filter
     visible={showFilters}

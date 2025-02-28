@@ -12,7 +12,7 @@
 
 // const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
 //   const [isEditing, setIsEditing] = useState(mode === 'add');
-//   const [formData, setFormData] = useState({
+//   const [data, setdata] = useState({
 //     name: '',
 //     category: '',
 //     description: '',
@@ -25,7 +25,7 @@
 
 //   const handleChange = (e) => {
 //     const { name, value } = e.target;
-//     setFormData(prev => ({
+//     setdata(prev => ({
 //       ...prev,
 //       [name]: name === 'price' || name === 'stock' ? Number(value) : value
 //     }));
@@ -34,7 +34,7 @@
 
 //   const handleSubmit = (e) => {
 //     e.preventDefault();
-//     onSave(formData);
+//     onSave(data);
 //     onClose();
 //   };
 
@@ -62,7 +62,7 @@
 
 //       useEffect(() => {
 //         if (mode === 'add') {
-//           setFormData({
+//           setdata({
 //             id: `PHAR-${Date.now()}`,
 //             name: '',
 //             category: '',
@@ -75,7 +75,7 @@
 //             status: 'active'
 //           });
 //         } else if (product) {
-//           setFormData(product);
+//           setdata(product);
 //         }
 //       }, [mode, product]);
     
@@ -88,7 +88,7 @@
 //       {/* Modal header */}
 //       <div className="flex justify-between items-center p-6 border-b">
 //         <h2 className="text-2xl font-semibold">
-//           {mode === 'add' ? 'Add New Product' : formData.name}
+//           {mode === 'add' ? 'Add New Product' : data.name}
 //         </h2>
 //         <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
 //           <BsX className="w-6 h-6" />
@@ -105,8 +105,8 @@
 //               <label className="block text-sm font-medium mb-2">Product Name</label>
 //               <input
 //                 name="name"
-//                 value={formData.name}
-//                 onChange={(e) => setFormData(prev => ({...prev, name: e.target.value}))}
+//                 value={data.name}
+//                 onChange={(e) => setdata(prev => ({...prev, name: e.target.value}))}
 //                 required
 //                 disabled={mode === 'view'}
 //                 className="w-full p-2 border rounded-md disabled:bg-gray-100"
@@ -122,8 +122,8 @@
 //               <input
 //                 type="number"
 //                 name="price"
-//                 value={formData.price}
-//                 onChange={(e) => setFormData(prev => ({...prev, price: Number(e.target.value)}))}
+//                 value={data.price}
+//                 onChange={(e) => setdata(prev => ({...prev, price: Number(e.target.value)}))}
 //                 required
 //                 min="0"
 //                 step="0.01"
@@ -165,6 +165,7 @@
 
 // export default AddProduct
 
+import axios from 'axios';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { 
@@ -178,8 +179,16 @@ import {
   BsImage
 } from 'react-icons/bs';
 
-const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
-  const [formData, setFormData] = useState({
+export function validateEmail(email: string): boolean {
+  return /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/.test(email);
+}
+
+export function validatePassword(password: string): boolean {
+  return password.length >= 8;
+}
+
+const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet, id }) => {
+  const [data, setData] = useState({
     name: '',
     category: '',
     description: '',
@@ -190,8 +199,13 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
     status: 'active'
   });
 
+  const [errors, setErrors] = useState({
+      email: '',
+      password: '',
+    });
   const [filePreviews, setFilePreviews] = useState([]);
   const [files, setFiles] = useState([]);
+  const [loader, setLoader] = useState(true)
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     if (rejectedFiles.length > 0) {
@@ -240,7 +254,7 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setData(prev => ({
       ...prev,
       [name]: name === 'price' || name === 'stock' ? Number(value) : value
     }));
@@ -248,11 +262,11 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formDataWithFiles = {
-      ...formData,
+    const dataWithFiles = {
+      ...data,
       img: files.map(f => f.file)
     };
-    onSave(formDataWithFiles);
+    onSave(dataWithFiles);
     onClose();
   };
 
@@ -267,7 +281,7 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
 
   useEffect(() => {
     if (mode === 'add') {
-      setFormData({
+      setData({
         id: `PHAR-${Date.now()}`,
         name: '',
         category: '',
@@ -282,10 +296,80 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
       setFiles([]);
       setFilePreviews([]);
     } else if (product) {
-      setFormData(product);
+      setData(product);
       setFilePreviews(product.img || []);
     }
   }, [mode, product]);
+
+   const validateForm = () => {
+      const emailError = validateEmail(data.email) ? '' : 'Invalid email format';
+      const passwordError = validatePassword(data.password) ? '' : 'Password must be at least 8 characters';
+  
+      setErrors({
+        email: emailError,
+        password: passwordError,
+      });
+  
+      return !( emailError || passwordError );
+    };
+
+    const formData = new FormData();
+formData.append('name', data.name);
+formData.append('quantity', data.stock);
+formData.append('cost_price', data.price);
+formData.append('selling_price', data.price);
+files.forEach((image, index) => {
+  formData.append(`images[]`, image);
+})
+
+  const AddProductURlAPI = 'http://127.0.0.1:8000/api/products';
+
+  async function add_product() {
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoader(true);
+    try {
+      const response = await axios.post(AddProductURlAPI,formData,{
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('token')}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "multipart/form-data"
+        }
+      });
+      console.log('pp',response.data)
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoader(false);
+    }
+  }
+
+  
+  const EditProductURlAPI = `http://127.0.0.1:8000/api/products/${id}`;
+
+  async function edit_product() {
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoader(true);
+    try {
+      const response = await axios.post(EditProductURlAPI,formData,{
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('token')}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "multipart/form-data"
+        }
+      });
+      console.log('pp',response.data)
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoader(false);
+    }
+  }
 
   if(visible == null) return null;
 
@@ -294,7 +378,7 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
       <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl h-[97%]">
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="text-2xl font-semibold">
-            {mode === 'add' ? 'Add New Product' : formData.name}
+            {mode === 'add' ? 'Add New Product' : data.name}
           </h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <BsX className="w-6 h-6" />
@@ -308,7 +392,7 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
                 <label className="block text-sm font-medium mb-2">Product Name</label>
                 <input
                   name="name"
-                  value={formData.name}
+                  value={data.name}
                   onChange={handleChange}
                   required
                   disabled={mode === 'view'}
@@ -320,7 +404,7 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
                 <label className="block text-sm font-medium mb-2">Category</label>
                 {/* <input
                   name="category"
-                  value={formData.category}
+                  value={data.category}
                   onChange={handleChange}
                   required
                   disabled={mode === 'view'}
@@ -330,7 +414,7 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
         name="supplier"
         required
         className="w-full px-4 py-2 border rounded-lg outline-none focus:border-2 focus:border-black"
-        value={formData.supplier}
+        value={data.supplier}
         onChange={handleChange}
       >
         <option value="">Choose a catagory</option>
@@ -353,7 +437,7 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
                 <input
                   type="number"
                   name="price"
-                  value={formData.price}
+                  value={data.price}
                   onChange={handleChange}
                   required
                   min="0"
@@ -368,7 +452,7 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
                 <input
                   type="number"
                   name="stock"
-                  value={formData.stock}
+                  value={data.stock}
                   onChange={handleChange}
                   required
                   min="0"
@@ -384,7 +468,7 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
         name="supplier"
         required
         className="w-full px-4 py-2 border rounded-lg outline-none focus:border-2 focus:border-black"
-        value={formData.supplier}
+        value={data.supplier}
         onChange={handleChange}
       >
         <option value="">Choose a supplier</option>
@@ -403,7 +487,7 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
                 <label className="block text-sm font-medium mb-2">Description</label>
                 <textarea
                   name="description"
-                  value={formData.description}
+                  value={data.description}
                   onChange={handleChange}
                   disabled={mode === 'view'}
                   maxLength={250}
@@ -471,9 +555,20 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet }) => {
             {mode !== 'view' && (
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="w-28 h-10 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                onClick={()=>{mode === 'add' ? add_product() : edit_product()}}
               >
-                {mode === 'add' ? 'Add Product' : 'Save Changes'}
+                
+                {loader ? (
+                <div class="w-full gap-x-2 flex justify-center items-center">
+                  <div class="w-3 bg-[#dbd5e9] animate-pulse h-3 rounded-full"></div>
+                  <div class="w-3 animate-pulse h-3 bg-[#dbd5e9] rounded-full"></div>
+                  <div class="w-3 h-3 animate-pulse bg-[#dbd5e9] rounded-full"></div>
+                </div>
+              ) : (
+                
+                `${mode === 'add' ? 'Add Product' : 'Save Changes'}`
+              )}
               </button>
             )}
           </div>
