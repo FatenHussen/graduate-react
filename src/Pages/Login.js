@@ -5,16 +5,16 @@
 import React, { useState } from "react";
 import { BsEnvelope, BsKey, BsEye, BsEyeSlash } from "react-icons/bs";
 import bg from "../Assets/Vector1.png";
-// import axios from "axios";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// export function validateEmail(email: string): boolean {
-//   return /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/.test(email);
-// }
+export function validateEmail(email: string): boolean {
+  return /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/.test(email);
+}
 
-// export function validatePassword(password: string): boolean {
-//   return password.length >= 8;
-// }
+export function validatePassword(password: string): boolean {
+  return password.length >= 8;
+}
 
 const Login = () => {
   const navigate = useNavigate();
@@ -29,45 +29,45 @@ const Login = () => {
     password: '',
   });
 
-  // const validateForm = () => {
-  //   const emailError = validateEmail(formData.email) ? '' : 'Invalid email format';
-  //   const passwordError = validatePassword(formData.password) ? '' : 'Password must be at least 8 characters';
+  const validateForm = () => {
+    const emailError = validateEmail(formData.email) ? '' : 'Invalid email format';
+    const passwordError = validatePassword(formData.password) ? '' : 'Password must be at least 8 characters';
 
-  //   setErrors({
-  //     email: emailError,
-  //     password: passwordError,
-  //   });
+    setErrors({
+      email: emailError,
+      password: passwordError,
+    });
 
-  //   return !( emailError || passwordError );
-  // };
+    return !( emailError || passwordError );
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // const LoginURlAPI = 'http://127.0.0.1:8000/api/user/login';
+  const LoginURlAPI = 'http://127.0.0.1:8000/api/login';
 
-  // async function Login() {
-  //   if (!validateForm()) {
-  //     return;
-  //   }
+  async function Login() {
+    if (!validateForm()) {
+      return;
+    }
 
-  //   setLoader(true);
-  //   try {
-  //     const response = await axios.post(LoginURlAPI, {
-  //       email: formData.email,
-  //       password: formData.password,
-  //     });
-  //     console.log('pp',response.data.data.token)
-  //     localStorage.setItem('token', response.data.data.token);
-  //     navigate('/');
-  //   } catch (err) {
-  //     console.error(err);
-  //   } finally {
-  //     setLoader(false);
-  //   }
-  // }
+    setLoader(true);
+    try {
+      const response = await axios.post(LoginURlAPI, {
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log('pp',response.data.data.token)
+      localStorage.setItem('token', response.data.data.token);
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoader(false);
+    }
+  }
 
   console.log("ss", formData);
 
@@ -115,7 +115,7 @@ const Login = () => {
               </label>
             </div>
 
-            <div className="w-[80%] -mt-10 flex justify-between">
+            {/* <div className="w-[80%] -mt-5 flex justify-between">
               <div className="h-7 flex justify-center items-center gap-1">
                 <input type="checkbox" name="remember_me" id="remember_me" />
                 <label htmlFor="remember_me" className="h-fit text-black ">
@@ -128,7 +128,7 @@ const Login = () => {
               >
                 Forgot password?
               </a>
-            </div>
+            </div> */}
           </div>
           <div className="w-[100%] flex justify-center items-center flex-col gap-1">
             <button

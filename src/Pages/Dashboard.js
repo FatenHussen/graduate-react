@@ -1,12 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SideBar from '../Components/Sidebar'
 import { BsBoxSeam , BsCartCheck, BsCurrencyDollar  } from "react-icons/bs"
 import Box from '../Components/Dashboard/Box'
 import RevenueChart from '../Components/Dashboard/RevenueChart';
 import TopCatagory from '../Components/Dashboard/TopCatagory';
 import TopProducts from '../Components/Dashboard/TopProducts';
+import axios from 'axios';
 
 const Dashboard = () => {
+  const [dataToday, setDataToday] = useState([])
+  const [dataSold, setDataSold] = useState([])
+  const [dataProduct, setDataProduct] = useState([])
+  const [loader ,setLoader] = useState(true)
 
     const data = {
         "daily": {
@@ -114,11 +119,84 @@ const Dashboard = () => {
         ]
       }
 
-      
+      const ProfitTodayListURlAPI = 'http://127.0.0.1:8000/api/orders/profit-today';
+
+  async function today_profit() {
+    try {
+      const response = await axios.get(ProfitTodayListURlAPI, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setDataToday(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const SoldTodayListURlAPI = 'http://localhost:8000/api/orders/sold-today';
+
+  async function today_sold() {
+    try {
+      const response = await axios.get(SoldTodayListURlAPI, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setDataSold(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const ProductCountListURlAPI = 'http://127.0.0.1:8000/api/products_total';
+
+  async function product_count() {
+    try {
+      const response = await axios.get(ProductCountListURlAPI, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setDataProduct(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    today_profit();
+    product_count()
+    today_sold()
+  }, []);
+
+  useEffect(() => {
+    if(dataProduct.length > 0 && dataSold.length > 0 && dataToday.length > 0){
+      setLoader(false)
+    }
+  }, [dataProduct, dataSold, dataToday]);
 
   return (
     <div className='w-full h-fit flex justify-between items-center flex-col'>
         <SideBar/>
+{loader ? 
+<div class="flex-col gap-4 w-full h-screen flex items-center justify-center">
+  <div
+    class="w-20 h-20 border-4 border-transparent text-[#0674be] text-4xl animate-spin flex items-center justify-center border-t-[#0674be] rounded-full"
+  >
+    <div
+      class="w-16 h-16 border-4 border-transparent text-[#0693be8b] text-2xl animate-spin flex items-center justify-center border-t-[#0693be8b] rounded-full"
+    ></div>
+  </div>
+</div>
+ :
+<>
             <div className='w-[95%] pb-1 border-b-2 border-[#0693be] text-[#0693be] mb-5'>
                 <h1 className='w-[90%] text-2xl sm:text-4xl font-semibold'>Dashboard</h1>
                 <h2 className='w-[90%] text-base sm:text-xl font-thin'>Welcome to Elegance Hub</h2>
@@ -140,6 +218,8 @@ const Dashboard = () => {
 
         </div>
         </div>
+        </>
+        }
    </div>
   )
 }
