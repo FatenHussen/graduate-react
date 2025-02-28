@@ -192,6 +192,7 @@ const Products = () => {
   selectedCategories.length > 0;
 
     return (
+      
       <div className='w-full h-fit flex justify-between items-center flex-col md:flex-row'>
           <SideBar/>
           <div className='w-[95%] min-h-screen h-fit flex justify-evenly items-center flex-col my-5 md:my-0'>
@@ -209,7 +210,7 @@ const Products = () => {
       <BsFunnel  size={20}/>
       {hasFilters && (
     <div className="absolute top-0 right-0 w-3 h-3 bg-red-600 rounded-full animate-pulse"></div>
-  )}
+  )}  
     </button>
     {hasFilters && (
     <button className='p-2 border-2 border-[#0693be] hover:border-[#0693be90] text-[#0693be] hover:text-[#0693be90] rounded-xl transition ease-in-out delay-50'
