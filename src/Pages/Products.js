@@ -180,11 +180,17 @@ const Products = () => {
           return matchesPrice && matchesRating && matchesCategory;
         });
 
-        const DeleteURlAPI = `http://127.0.0.1:8000/api/products/${selectedProduct.id}`;
+        const DeleteURlAPI = `http://127.0.0.1:8000/api/products/1`;
 
   async function delete_product() {
     try {
-      const response = await axios.delete(DeleteURlAPI,);
+      const response = await axios.delete(DeleteURlAPI,{
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('token')}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "multipart/form-data"
+        }
+      });
       console.log('pp',response.data)
       // localStorage.setItem('token', response.data.data.token);
     } catch (err) {

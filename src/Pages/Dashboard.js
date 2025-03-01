@@ -8,9 +8,9 @@ import TopProducts from '../Components/Dashboard/TopProducts';
 import axios from 'axios';
 
 const Dashboard = () => {
-  const [dataToday, setDataToday] = useState([])
-  const [dataSold, setDataSold] = useState([])
-  const [dataProduct, setDataProduct] = useState([])
+  const [dataToday, setDataToday] = useState(null)
+  const [dataSold, setDataSold] = useState(null)
+  const [dataProduct, setDataProduct] = useState(null)
   const [loader ,setLoader] = useState(true)
 
     const data = {
@@ -130,7 +130,8 @@ const Dashboard = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setDataToday(response.data);
+      console.log('pp',response.data.total_profit_today)
+      setDataToday(response.data.total_profit_today);
     } catch (err) {
       console.log(err);
     }
@@ -147,7 +148,9 @@ const Dashboard = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setDataSold(response.data);
+      console.log('pp',response.data.total_products_sold_today)
+
+      setDataSold(response.data.total_products_sold_today);
     } catch (err) {
       console.log(err);
     }
@@ -164,7 +167,9 @@ const Dashboard = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setDataProduct(response.data);
+      console.log('ss',response.data.total_products)
+
+      setDataProduct(response.data.total_products);
     } catch (err) {
       console.log(err);
     }
@@ -177,10 +182,10 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    if(dataProduct.length > 0 && dataSold.length > 0 && dataToday.length > 0){
+    if( dataSold != null && dataToday != null && dataProduct != null){
       setLoader(false)
     }
-  }, [dataProduct, dataSold, dataToday]);
+  }, [dataProduct ,dataSold, dataToday]);
 
   return (
     <div className='w-full h-fit flex justify-between items-center flex-col'>
@@ -202,21 +207,21 @@ const Dashboard = () => {
                 <h2 className='w-[90%] text-base sm:text-xl font-thin'>Welcome to Elegance Hub</h2>
             </div>
             <div className='w-full h-fit md:flex justify-evenly items-center'>
-        <div className='w-[100%] md:w-[68%] h-fit flex justify-center items-center flex-col gap-7'>
-            <div className='w-[95%] h-fit flex justify-between items-center flex-col md:flex-row gap-3 md:gap-0'>
-                <Box header={'Number of products'} value={3000} icon={<BsBoxSeam/>} color={'#3b82f6'}/>
-                <Box header={'Products sold today'} value={300} icon={<BsCartCheck/>} color={'#22c55e'}/>
-                <Box header={'Today revenue'} value={1500} icon={<BsCurrencyDollar/>} color={'#a855f7'}/>
+        <div className='w-[90%] h-fit flex justify-center items-center gap-7 mr-10 mt-5'>
+            <div className='w-[30%] h-fit flex justify-between items-center flex-col gap-12'>
+                <Box header={'Number of products'} value={dataProduct} icon={<BsBoxSeam/>} color={'#3b82f6'}/>
+                <Box header={'Products sold today'} value={dataSold} icon={<BsCartCheck/>} color={'#22c55e'}/>
+                <Box header={'Today revenue'} value={dataToday} icon={<BsCurrencyDollar/>} color={'#a855f7'}/>
             </div>
-            <div className="w-[95%] h-fit hidden sm:block">
+            <div className="w-[70%] h-fit hidden sm:block">
                 <RevenueChart data={data}/>
             </div>
         </div>
-        <div className='w-[95%] md:w-[27%] h-fit mx-auto md:ml-0 md:mr-[5%] my-5 md:my-0'>
+        {/* <div className='w-[95%] md:w-[27%] h-fit mx-auto md:ml-0 md:mr-[5%] my-5 md:my-0'>
             <TopCatagory data={pieData}/>
             <TopProducts data={productsData}/>
 
-        </div>
+        </div> */}
         </div>
         </>
         }

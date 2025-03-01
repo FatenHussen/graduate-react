@@ -170,42 +170,23 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { 
   BsX, 
-  BsPencil, 
-  BsPlus, 
-  BsCheckCircle,
-  BsCapsule,
-  BsArchive,
   BsTrash,
   BsImage
 } from 'react-icons/bs';
 
-export function validateEmail(email: string): boolean {
-  return /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/.test(email);
-}
-
-export function validatePassword(password: string): boolean {
-  return password.length >= 8;
-}
 
 const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet, id }) => {
   const [data, setData] = useState({
     name: '',
-    category: '',
-    description: '',
-    price: '',
-    stock: '',
-    supplier: '', 
+    selling_price: '',
+    cost_price: "",
+    stock: '', 
     img: [],
-    status: 'active'
   });
 
-  const [errors, setErrors] = useState({
-      email: '',
-      password: '',
-    });
   const [filePreviews, setFilePreviews] = useState([]);
   const [files, setFiles] = useState([]);
-  const [loader, setLoader] = useState(true)
+  const [loader, setLoader] = useState(false)
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     if (rejectedFiles.length > 0) {
@@ -256,18 +237,19 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet, id }) =
     const { name, value } = e.target;
     setData(prev => ({
       ...prev,
-      [name]: name === 'price' || name === 'stock' ? Number(value) : value
+      [name]: name === 'selling_price' || name === 'cost_price' || name === 'stock' ? Number(value) : value
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const dataWithFiles = {
-      ...data,
-      img: files.map(f => f.file)
-    };
-    onSave(dataWithFiles);
-    onClose();
+    // const dataWithFiles = {
+    //   ...data,
+    //   img: files.map(f => f.file)
+    // };
+    // onSave(dataWithFiles);
+    add_product()
+    // onClose();
   };
 
   useEffect(() => {
@@ -279,56 +261,47 @@ const AddProduct = ({ mode, product, onClose, onSave, visible, setDelet, id }) =
     };
   }, [visible]);
 
-  useEffect(() => {
-    if (mode === 'add') {
-      setData({
-        id: `PHAR-${Date.now()}`,
-        name: '',
-        category: '',
-        description: '',
-        price: '',
-        stock: '',
-        supplier: '',
-        sku: '',
-        expiry: '',
-        status: 'active'
-      });
-      setFiles([]);
-      setFilePreviews([]);
-    } else if (product) {
-      setData(product);
-      setFilePreviews(product.img || []);
-    }
-  }, [mode, product]);
+  // useEffect(() => {
+  //   if (mode === 'add') {
+  //     setData({
+  //       id: `PHAR-${Date.now()}`,
+  //       name: '',
+  //       category: '',
+  //       description: '',
+  //       price: '',
+  //       stock: '',
+  //       supplier: '',
+  //       sku: '',
+  //       expiry: '',
+  //       status: 'active'
+  //     });
+  //     setFiles([]);
+  //     setFilePreviews([]);
+  //   } else if (product) {
+  //     setData(product);
+  //     setFilePreviews(product.img || []);
+  //   }
+  // }, [mode, product]);
 
-   const validateForm = () => {
-      const emailError = validateEmail(data.email) ? '' : 'Invalid email format';
-      const passwordError = validatePassword(data.password) ? '' : 'Password must be at least 8 characters';
-  
-      setErrors({
-        email: emailError,
-        password: passwordError,
-      });
-  
-      return !( emailError || passwordError );
-    };
 
     const formData = new FormData();
 formData.append('name', data.name);
 formData.append('quantity', data.stock);
-formData.append('cost_price', data.price);
-formData.append('selling_price', data.price);
+formData.append('cost_price', data.cost_price);
+formData.append('selling_price', data.selling_price);
 files.forEach((image, index) => {
-  formData.append(`images[]`, image);
+  formData.append(`images[]`, image.file);
 })
+
+formData.forEach((value, key) => {
+  console.log(`${key}:`, value);
+});
+
+console.log('tt', files)
 
   const AddProductURlAPI = 'http://127.0.0.1:8000/api/products';
 
-  async function add_product() {
-    if (!validateForm()) {
-      return;
-    }
-
+  async function add_product(e) {
     setLoader(true);
     try {
       const response = await axios.post(AddProductURlAPI,formData,{
@@ -350,9 +323,6 @@ files.forEach((image, index) => {
   const EditProductURlAPI = `http://127.0.0.1:8000/api/products/${id}`;
 
   async function edit_product() {
-    if (!validateForm()) {
-      return;
-    }
 
     setLoader(true);
     try {
@@ -388,7 +358,7 @@ files.forEach((image, index) => {
         <form onSubmit={handleSubmit} className="p-4 space-y-3">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-1">
-              <div>
+              <div >
                 <label className="block text-sm font-medium mb-2">Product Name</label>
                 <input
                   name="name"
@@ -401,7 +371,19 @@ files.forEach((image, index) => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-2">Category</label>
+                <label className="block text-sm font-medium mb-2">Cost price ($)</label>
+                <input
+                  type="number"
+                  name="cost_price"
+                  value={data.cost_price}
+                  onChange={handleChange}
+                  required
+                  min="0"
+                  disabled={mode === 'view'}
+                  className="w-full p-2 border rounded-md disabled:bg-gray-100"
+                />
+                {/* <label className="block text-sm font-medium mb-2">Category</label> */}
+
                 {/* <input
                   name="category"
                   value={data.category}
@@ -410,21 +392,20 @@ files.forEach((image, index) => {
                   disabled={mode === 'view'}
                   className="w-full p-2 border rounded-md disabled:bg-gray-100"
                 /> */}
-                <select
-        name="supplier"
+                {/* <select
+        name="catagory"
         required
         className="w-full px-4 py-2 border rounded-lg outline-none focus:border-2 focus:border-black"
         value={data.supplier}
         onChange={handleChange}
       >
         <option value="">Choose a catagory</option>
-        {/* Add optional chaining */}
         {product?.suppliers?.map((supplier) => (
           <option key={supplier} value={supplier}>
             {supplier}
           </option>
         ))}
-      </select>
+      </select> */}
               </div>
 
               
@@ -432,7 +413,7 @@ files.forEach((image, index) => {
 
             <div className="space-y-1">
               <div className='flex justify-between items-center'> 
-              <div className='w-[48%]'>
+              {/* <div className='w-[48%]'>
                 <label className="block text-sm font-medium mb-2">Price ($)</label>
                 <input
                   type="number"
@@ -445,9 +426,9 @@ files.forEach((image, index) => {
                   disabled={mode === 'view'}
                   className="w-full p-2 border rounded-md disabled:bg-gray-100"
                 />
-              </div>
+              </div> */}
 
-              <div className='w-[48%]'>
+              <div className='w-[50%]'>
                 <label className="block text-sm font-medium mb-2">Stock</label>
                 <input
                   type="number"
@@ -463,8 +444,19 @@ files.forEach((image, index) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Supplier</label>
-                <select
+              <label className="block text-sm font-medium mb-2">Selling price ($)</label>
+              <input
+                  type="number"
+                  name="selling_price"
+                  value={data.selling_price}
+                  onChange={handleChange}
+                  required
+                  min="0"
+                  disabled={mode === 'view'}
+                  className="w-full p-2 border rounded-md disabled:bg-gray-100"
+                />
+                {/* <label className="block text-sm font-medium mb-2">Supplier</label> */}
+                {/* <select
         name="supplier"
         required
         className="w-full px-4 py-2 border rounded-lg outline-none focus:border-2 focus:border-black"
@@ -472,18 +464,18 @@ files.forEach((image, index) => {
         onChange={handleChange}
       >
         <option value="">Choose a supplier</option>
-        {/* Add optional chaining */}
+
         {product?.suppliers?.map((supplier) => (
           <option key={supplier} value={supplier}>
             {supplier}
           </option>
         ))}
-      </select>
+      </select> */}
               </div>
             </div>
             
           </div>
-          <div>
+          {/* <div>
                 <label className="block text-sm font-medium mb-2">Description</label>
                 <textarea
                   name="description"
@@ -493,7 +485,7 @@ files.forEach((image, index) => {
                   maxLength={250}
                   className="w-full p-2 border rounded-md disabled:bg-gray-100 h-32 resize-none"
                 />
-              </div>
+              </div> */}
 
           {/* Image Upload Section */}
           <div className="col-span-full">
@@ -555,8 +547,8 @@ files.forEach((image, index) => {
             {mode !== 'view' && (
               <button
                 type="submit"
-                className="w-28 h-10 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                onClick={()=>{mode === 'add' ? add_product() : edit_product()}}
+                className={`w-28 h-10 bg-blue-600 text-white rounded-md hover:bg-blue-700 ${filePreviews.length > 0 ? 'mt-20' :'mt-44'}`}
+                // onClick={()=>{mode === 'add' ? add_product() : edit_product()}}
               >
                 
                 {loader ? (

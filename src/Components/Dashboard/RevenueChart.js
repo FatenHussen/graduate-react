@@ -31,7 +31,7 @@ const RevenueChart = ({data}) => {
       <h3 className="text-lg font-semibold text-gray-700">Revenue Overview</h3>
       <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
         <div className="flex gap-2">
-          {['daily', 'weekly', 'monthly'].map((period) => (
+          {['daily', 'monthly'].map((period) => (
             <button
               key={period}
               onClick={() => setSelectedPeriod(period)}
@@ -60,7 +60,7 @@ const RevenueChart = ({data}) => {
       </div>
     </div>
 
-    <div className="h-[365px]">
+    <div className="h-[500px]">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={getChartData()}>
           <XAxis 

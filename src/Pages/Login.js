@@ -59,9 +59,9 @@ const Login = () => {
         email: formData.email,
         password: formData.password,
       });
-      console.log('pp',response.data.data.token)
-      localStorage.setItem('token', response.data.data.token);
-      navigate('/');
+      console.log('pp',response.data.access_token)
+      localStorage.setItem('token', response.data.access_token);
+      navigate('/dashboard');
     } catch (err) {
       console.error(err);
     } finally {
